@@ -1,32 +1,46 @@
 import { useState } from "react";
-
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card"
 import useSWR, { Fetcher } from "swr";
 
-const livros = [
-  { id: 1, title: 'O Senhor dos Anéis', author: 'J.R.R. Tolkien' },
-  { id: 2, title: '1984', author: 'George Orwell' },
-  { id: 3, title: 'Dom Quixote', author: 'Miguel de Cervantes' },
-  { id: 4, title: 'A Revolução dos Bichos', author: 'George Orwell' },
-];
+import { Pagination } from "@/components/pagination";
+import Book from "@/components/book";
 
-type IBooks = {
+type IBook = {
   id: string;
   title: string;
   author: string;
   biography: string;
 }
 
-const fetchAPI: Fetcher<IBooks[], string> = async (key: string) => {
+type IResponse = {
+  books: IBook[];
+  total: number
+}
+
+const fetchAPI: Fetcher<IResponse, string> = async (key: string) => {
   const response = await fetch(key);
   const responseBody = await response.json();
   return responseBody;
 }
 
 export default function Home() {
-  const { data, error } = useSWR('http://localhost:5000/api/v1/books', fetchAPI)
-
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const { data, error } = useSWR(`http://localhost:5000/api/v1/books?page=${currentPage}&page_size=10`, fetchAPI)
+
+  if (!data) {
+    return "...carregando"
+  }
+
+  const totalItems = data.total;
+
+  const totalPages = Math.ceil(totalItems / 10);
+
+  const changePage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -40,21 +54,21 @@ export default function Home() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        
+        <Pagination total={data.total} currentPage={currentPage} onPageChange={changePage}/>
+
         <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {data?.map((book) => (
-            <Card key={book.id}>
-              <CardHeader>
-                <CardTitle>{book.title}</CardTitle>
-                <CardDescription color="textSecondary">
-                  {book.author}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div dangerouslySetInnerHTML={{ __html: book.biography }} />
-              </CardContent>
-            </Card>
+          {data.books.map((book) => (
+            <Book 
+              key={book.id} 
+              title={book.title}
+              author={book.author}
+              biography={book.biography}
+              id={book.id}
+            />
           ))}
         </div>
+        
       </div>
     </div>
   );
