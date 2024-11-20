@@ -31,6 +31,21 @@ def get_books():
         'total': total_books
     })
 
+@app.route('/api/v1/books/<int:id>', methods=['DELETE'])
+def delete_book(id):
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    cursor.execute('DELETE FROM book WHERE id = ?;', (id,))
+    
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        return jsonify({"message": "Book not found"}), 404
+
+    conn.close()
+
+    return jsonify({"message": "Book deleted successfully"}), 200
 
 # GET /api/v1/books/author/<author> - returns a list of all books by the given author
 
