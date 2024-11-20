@@ -23,9 +23,13 @@ def get_books():
 
     # Call the get_all_books function with the page and page_size parameters
     books = get_all_books(page=page, page_size=page_size)
+    total_books = get_total_books()
 
     # Return the books as a JSON response
-    return jsonify(books)
+    return jsonify({
+        'books': books,
+        'total': total_books
+    })
 
 
 # GET /api/v1/books/author/<author> - returns a list of all books by the given author
@@ -67,6 +71,17 @@ def create_book():
 
     return jsonify(create_new_book(book_data))
 
+
+def get_total_books():
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT count(*) FROM book;')
+    total_books = cursor.fetchone()[0]
+
+    conn.close()
+
+    return total_books
 
 def get_all_books(page=1, page_size=10):
     conn = sqlite3.connect('db.sqlite')
