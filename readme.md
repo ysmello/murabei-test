@@ -40,14 +40,14 @@ Aqui vao os pontos que sera avaliados no teste:
 
 **_Obrigatorios_**
 
-- O FE deve possuir uma imagem docker, e rodar junto com os outros servicos no **_docker-compose.yml_** (1 ponto)
-- O FE deve possuir uma tela de listagem dos livros (1 ponto)
+- O FE deve possuir uma imagem docker, e rodar junto com os outros servicos no **_docker-compose.yml_** (1 ponto) - OK
+- O FE deve possuir uma tela de listagem dos livros (1 ponto) - OK
 - O FE deve possuir uma tela de busca de livros por titulo (1 ponto)
 - O FE deve possuir uma tela de busca de livros por autor (1 ponto)
 - O FE deve possuir uma tela de criacao de livros (1 ponto)
-- O FE deve possuir uma funcao de de deletar livros (1 ponto)
-- As telas devem ser feitas usando componentes da biblioteca [shadcn/ui](https://ui.shadcn.com/) (1 ponto)
-- O Frontend deve estar em Typescript (2 pontos)
+- O FE deve possuir uma funcao de de deletar livros (1 ponto) - OK
+- As telas devem ser feitas usando componentes da biblioteca [shadcn/ui](https://ui.shadcn.com/) (1 ponto) - OK
+- O Frontend deve estar em Typescript (2 pontos) - OK
 
 **Total: 9 pontos**
 
@@ -55,7 +55,6 @@ Aqui vao os pontos que sera avaliados no teste:
 
 - Fazer o deploy publico da aplicacao em qualquer servico que aceite as imagens docker (2 pontos)
 - Adicionar testes (unitarios ou end-to-end) (2 pontos)
-
 
 **Total: 4 pontos**
 
