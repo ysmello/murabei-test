@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import useSWR, { Fetcher, useSWRConfig } from "swr";
 
@@ -6,6 +6,7 @@ import Book from "@/components/book";
 import { apiConfig } from "@/lib/config";
 import { useToast } from "@/hooks/use-toast";
 import { Alert } from "@/components/alert";
+import SearchBar from "@/components/searchBar";
 
 type IBook = {
   id: string;
@@ -26,7 +27,7 @@ export default function Search() {
   const { mutate } = useSWRConfig();
   const { toast } = useToast();
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     `${apiConfig.url}/api/v1/books/${router.query.searchType}/${router.query.search}`,
     fetchAPI
   );
@@ -63,24 +64,24 @@ export default function Search() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="container mx-auto p-4">
-        <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {data ? (
-            data.map((book) => (
-              <Book
-                key={book.id}
-                title={book.title}
-                author={book.author}
-                biography={book.biography}
-                id={book.id}
-                onDelete={deleteBook}
-              />
-            ))
-          ) : (
-            <Alert description="Book not founded." />
-          )}
-        </div>
+    <div className="container mx-auto p-4">
+      <SearchBar />
+
+      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {data ? (
+          data.map((book) => (
+            <Book
+              key={book.id}
+              title={book.title}
+              author={book.author}
+              biography={book.biography}
+              id={book.id}
+              onDelete={deleteBook}
+            />
+          ))
+        ) : (
+          <Alert description="Book not founded." />
+        )}
       </div>
     </div>
   );
