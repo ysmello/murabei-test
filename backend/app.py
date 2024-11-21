@@ -281,9 +281,13 @@ def create_new_book(book_data):
     publisher = book_data['publisher']
     synopsis = book_data['synopsis']
 
+    cursor.execute('SELECT MAX(id) FROM book;')
+    last_id = cursor.fetchone()[0]
+    new_id = (last_id + 1) if last_id else 1
+
     # Execute a query to create a new book
-    cursor.execute('INSERT INTO book (title, author, author_slug, author_bio, authors, publisher, synopsis) VALUES (?, ?, ?, ?, ?, ?, ?);',
-                   (title, author, author_slug, author_bio, authors, publisher, synopsis))
+    cursor.execute('INSERT INTO book (id, title, author, author_slug, author_bio, authors, publisher, synopsis) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
+                   (new_id, title, author, author_slug, author_bio, authors, publisher, synopsis))
 
     # Commit the changes to the database
     conn.commit()
