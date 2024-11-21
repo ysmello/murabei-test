@@ -6,8 +6,6 @@ import Book from "@/components/book";
 import { apiConfig } from "@/lib/config";
 import { useToast } from "@/hooks/use-toast";
 import SearchBar from "@/components/searchBar";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 type IBook = {
   id: string;
@@ -33,7 +31,7 @@ export default function Home() {
 
   const { mutate } = useSWRConfig();
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     `${apiConfig.url}/api/v1/books?page=${currentPage}&page_size=10`,
     fetchAPI
   );

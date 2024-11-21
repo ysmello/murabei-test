@@ -12,7 +12,7 @@ import {
 import DeleteButton from "./deleteButton";
 
 type IAlertDialogProps = {
-  onConfirm: () => {};
+  onConfirm: () => void;
   title: string;
   description: string;
 };
