@@ -54,6 +54,10 @@ def delete_book(id):
 def get_books_by_author(author_slug):
     return jsonify(get_books_by_author_name(author_slug))
 
+@app.route('/api/v1/books/title/<title>', methods=['GET'])
+def get_books_by_title(title):
+    return jsonify(get_books_by_title(title))
+
 # GET /api/v1/books/subject/<subject_slug> - returns a list of all books by the given subject
 
 
@@ -152,6 +156,36 @@ def get_authors():
     # Return the authors as a JSON response
     return author_list
 
+
+def get_books_by_title(title):
+    conn = sqlite3.connect('db.sqlite')
+    cursor = conn.cursor()
+
+    # Execute a SELECT query to fetch all books by the given author
+    cursor.execute(
+        'SELECT * FROM book WHERE title LIKE ?;', ('%' + title + '%',))
+    books = cursor.fetchall()
+
+    # Convert the books data to a list of dictionaries
+    book_list = []
+
+    for book in books:
+        book_dict = {
+            'id': book[0],
+            'title': book[1],
+            'author': book[2],
+            'biography': book[4],
+            'authors': book[5],
+            'publisher': book[12],
+            'synopsis': book[21],
+        }
+        book_list.append(book_dict)
+
+    # Close the database connection
+    conn.close()
+
+    # Return the books as a JSON response
+    return book_list
 
 def get_books_by_author_name(author_slug):
     conn = sqlite3.connect('db.sqlite')
